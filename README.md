@@ -49,6 +49,49 @@ that run both on Linux, each validated against the original implementation's own
 output. Rank-In is distributed only as a Windows executable; Shambhala2 requires MATLAB.
 Neither tool is redistributed here — see that file's header for how to obtain them.
 
+## Parameters used for each method
+
+Every argument that departs from the package default, taken from the code linked in the
+table above. Where a method needs the two platforms on a particular scale, that is given
+too, because several of these choices change the result materially.
+
+| Method | Call | Non-default arguments | Input scale |
+|---|---|---|---|
+| QN | `normalize.quantiles.use.target()` | `target` = first microarray column | array RMA log2; seq log2(TPM+1) |
+| Angel | base R | `rank(x)/length(x)` within each sample | array RMA log2; seq log2(TPM+1) |
+| TDM | `tdm_transform()` | `ref_data` = microarray, `target_data` = RNA-seq | array RMA log2; seq rounded to integer |
+| MMR | `MatchMixeR::MM(a, lg)` | defaults | array RMA log2; seq log(TPM+1) |
+| ComBat | `sva::ComBat()` | `mod = NULL` | both quantile-normalized **within** platform first |
+| ComBat-seq | `sva::ComBat_seq()` | `group = NULL` | array `2^x` then depth-matched to the seq median library size and rounded; seq rounded |
+| RNABC | `normalize.quantiles.use.target()` then `sva::ComBat()` | `target` = `rowMeans` of the microarray; `mod = NULL` | array RMA log2; seq log(TPM+1) |
+| Shambhala2 | `Shambhala2(Input, P0, Q0)` | `k = 5`, `delete_buffer_files = TRUE` | `Q0` = microarray, `P0` = `Input` = **raw** seq; output already on the array scale |
+| limma | `limma::removeBatchEffect()` | `design = NULL` | both quantile-normalized **within** platform first |
+| XPN | `MatchMixeR::xpn()` | defaults; corrects **both** platforms | array RMA log2; seq log(TPM+1) |
+| MNN | `batchelor::mnnCorrect()` | `k = 20`, `cos.norm.in = FALSE`, `cos.norm.out = FALSE` | array RMA log2; seq log(TPM+1) |
+| COCONUT | `COCONUT()` | `control.0.col = "group"`, `byPlatform = FALSE` | array RMA log2; seq log(TPM+1) |
+| Rank-In | vendor program via `RankIn()` | vendor defaults; leading `gene` column, tab-separated, unquoted | array RMA log2; seq **raw** counts |
+| Meta (ACAT) | `ACAT()` | equal weights, `w_k = 1/K`; NA p-values dropped per gene | per-study p-values |
+
+Shared settings: differential expression is tested with `wilcox.test()` on the pooled
+corrected matrix; prediction uses `cv.glmnet(family = "binomial", nfolds = 5)` at
+`lambda.min` with `alpha` 1, 0.5 and 0 for lasso, elastic net and ridge; 100 replicates per
+simulation cell, seeds 101–200.
+
+Four of these are worth singling out, because the obvious alternative gives a different
+answer:
+
+- **ComBat and ComBat-seq take `mod`/`group = NULL`.** Passing the outcome leaks it into the
+  corrected matrix. On TCGA-LUSC, passing it produced a perfect in-sample fit and an
+  *inverted* test AUC (0.046); with `group = NULL` the same model gives 0.538.
+- **ComBat-seq's microarray input must be depth-matched.** `2^x` alone leaves the microarray
+  with a median library size 3.9x the RNA-seq, which ComBat-seq reads as real sequencing
+  depth and barely corrects.
+- **Shambhala2 takes raw counts and its output is used as is.** It maps onto `Q0`'s
+  distribution, and `Q0` is the log2 microarray, so the harmonized matrix is already on the
+  array scale; logging it again compresses the result.
+- **RNABC follows the published recipe**: quantile-normalize the RNA-seq onto the microarray
+  row means, then ComBat with `mod = NULL`.
+
 ## Datasets
 
 Four paired microarray / RNA-seq datasets. None is redistributed; all are public.
