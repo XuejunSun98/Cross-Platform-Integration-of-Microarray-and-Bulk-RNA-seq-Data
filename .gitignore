@@ -1,0 +1,12 @@
+# R
+.Rhistory
+.RData
+.Rproj.user/
+Rplots.pdf
+
+# primary data is not redistributed here; see code/prepare_inputs.R for how to obtain it
+*.rda
+
+# scratch and cluster logs
+scratch*/
+logs/

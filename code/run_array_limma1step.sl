@@ -1,0 +1,11 @@
+#!/bin/bash
+#SBATCH --job-name=l1s
+#SBATCH --array=101-200
+#SBATCH --time=06:00:00
+#SBATCH --mem=16G
+#SBATCH --cpus-per-task=1
+#SBATCH --output=/work/users/x/u/xuejun1/Integration_paper_Sim/revision_repo/logs/l1s_%a.log
+source /usr/share/lmod/lmod/init/bash
+module load r/4.5.0
+export OMP_NUM_THREADS=1
+Rscript /work/users/x/u/xuejun1/Integration_paper_Sim/revision_repo/code/limma_onestep_task.R

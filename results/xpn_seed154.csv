@@ -1,0 +1,17 @@
+"grid","level","seed","method","Type_I_error","Power","secs"
+"typeI_balance","balanced",154,"XPN",0.0527846534653465,NA,105.9
+"typeI_balance","same_imbalance",154,"XPN",0.0493811881188119,NA,103.8
+"typeI_balance","opp_imbalance",154,"XPN",0.04375,NA,104.1
+"typeI_balance","half_imbalance",154,"XPN",0.0560024752475248,NA,103.9
+"power_size","5",154,"XPN",0.0545197740112994,0.327,71.4
+"power_size","10",154,"XPN",0.0594632768361582,0.567,110.6
+"power_size","30",154,"XPN",0.0369350282485876,0.8435,186.8
+"power_size","50",154,"XPN",0.0639124293785311,0.9455,268.8
+"power_balance","balanced",154,"XPN",0.0579802259887006,0.932,262.3
+"power_balance","same_imbalance",154,"XPN",0.0400423728813559,0.919,274
+"power_balance","opp_imbalance",154,"XPN",0.0245762711864407,0.9205,281.7
+"power_balance","half_imbalance",154,"XPN",0.0519774011299435,0.935,269.5
+"power_effect","0.3",154,"XPN",0.0592514124293785,0.465,275
+"power_effect","0.5",154,"XPN",0.0561440677966102,0.717,269.8
+"power_effect","0.7",154,"XPN",0.0565677966101695,0.8525,265.4
+"power_effect","1",154,"XPN",0.0639124293785311,0.9455,265.7

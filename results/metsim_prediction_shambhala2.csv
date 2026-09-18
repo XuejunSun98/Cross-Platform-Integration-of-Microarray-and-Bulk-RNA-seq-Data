@@ -1,0 +1,7 @@
+"method","direction","penalty","paired_AUC_prob","paired_AUC_class","split_AUC_prob","split_AUC_class","nonzero","genes"
+"Shambhala2","array_to_seq","lasso",0.875164835164835,0.5,0.78962962962963,0.5,32,18566
+"Shambhala2","array_to_seq","elastic_net",0.878186813186813,0.5,0.796543209876543,0.5,52,18566
+"Shambhala2","array_to_seq","ridge",0.885274725274725,0.5,0.813086419753086,0.5,18566,18566
+"Shambhala2","seq_to_array","lasso",0.844120879120879,0.744230769230769,0.831111111111111,0.731481481481481,21,18566
+"Shambhala2","seq_to_array","elastic_net",0.866648351648352,0.759615384615385,0.84,0.666666666666667,27,18566
+"Shambhala2","seq_to_array","ridge",0.823269230769231,0.727472527472527,0.684197530864198,0.588888888888889,18566,18566

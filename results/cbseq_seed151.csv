@@ -1,0 +1,17 @@
+"grid","level","seed","method","Type_I_error","Power","secs"
+"typeI_balance","balanced",151,"ComBat_seq",0.00866336633663366,NA,38.6
+"typeI_balance","same_imbalance",151,"ComBat_seq",0.0132425742574257,NA,36.8
+"typeI_balance","opp_imbalance",151,"ComBat_seq",0.116398514851485,NA,35.4
+"typeI_balance","half_imbalance",151,"ComBat_seq",0.0107673267326733,NA,33.5
+"power_size","5",151,"ComBat_seq",0.0862994350282486,0.3385,23.1
+"power_size","10",151,"ComBat_seq",0.00798022598870056,0.4155,33.7
+"power_size","30",151,"ComBat_seq",0.00642655367231638,0.738,72.4
+"power_size","50",151,"ComBat_seq",0.0146892655367232,0.8165,105.5
+"power_balance","balanced",151,"ComBat_seq",0.0145480225988701,0.8035,101.9
+"power_balance","same_imbalance",151,"ComBat_seq",0.00529661016949153,0.8025,102.9
+"power_balance","opp_imbalance",151,"ComBat_seq",0.361299435028249,0.743,101.3
+"power_balance","half_imbalance",151,"ComBat_seq",0.147528248587571,0.921,101.8
+"power_effect","0.3",151,"ComBat_seq",0.0149717514124294,0.3095,101.4
+"power_effect","0.5",151,"ComBat_seq",0.0151129943502825,0.574,101.5
+"power_effect","0.7",151,"ComBat_seq",0.0149717514124294,0.722,100.7
+"power_effect","1",151,"ComBat_seq",0.0146892655367232,0.8165,101.8

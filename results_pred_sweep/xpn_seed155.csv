@@ -1,0 +1,13 @@
+"condition","method","penalty","direction","seed","AUC","accuracy","F1","nonzero"
+"balanced","XPN","lasso","array_to_seq",155,0.5496,0.53,0.494623655913978,7
+"balanced","XPN","lasso","seq_to_array",155,0.542,0.51,0.514851485148515,1
+"balanced","XPN","elastic_net","array_to_seq",155,0.5612,0.53,0.483516483516484,139
+"balanced","XPN","elastic_net","seq_to_array",155,0.4768,0.46,0.470588235294118,27
+"balanced","XPN","ridge","array_to_seq",155,0.5336,0.53,0.576576576576577,16160
+"balanced","XPN","ridge","seq_to_array",155,0.624,0.58,0.571428571428571,16160
+"same_imbalance","XPN","lasso","array_to_seq",155,0.537142857142857,0.66,0.15,22
+"same_imbalance","XPN","lasso","seq_to_array",155,0.47047619047619,0.57,0.188679245283019,1
+"same_imbalance","XPN","elastic_net","array_to_seq",155,0.554285714285714,0.65,0.222222222222222,115
+"same_imbalance","XPN","elastic_net","seq_to_array",155,0.472857142857143,0.56,0.0833333333333333,12
+"same_imbalance","XPN","ridge","array_to_seq",155,0.507619047619048,0.7,NA,16160
+"same_imbalance","XPN","ridge","seq_to_array",155,0.565714285714286,0.63,0.39344262295082,16160

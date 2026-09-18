@@ -1,0 +1,90 @@
+
+01-Sep-2026
+
+Dear Dr Zou,
+
+I am writing to inform you that your manuscript entitled 'Evaluating Cross-Platform Batch Correction Methods for Integrated Microarray and RNA-seq Data Analysis' (BIB-26-1707) has now been peer-reviewed.  The comments of the reviewers follow at the end of this email.
+
+We should like to invite you to respond to the comments of the reviewers and revise your manuscript according to their suggestions.
+
+To revise your manuscript, log into https://mc.manuscriptcentral.com/bib and enter your Author Center, where you will find your manuscript listed under "Manuscripts with Decisions."  Under "Actions," click on "Create a Revision."
+
+When creating your revision, you will be asked to provide a response to the reviewers' comments, point-by-point.  Where possible, please provide this response in the text box provided, rather than uploading your response as a document.  Do not use the file type 'Response to Decision Letter' as this is for transferred papers ONLY. Please ensure that any changes made to your manuscript are highlighted in colour, bold or underlining.  By doing this, you will help us to minimise the time needed to provide you with a decision.
+
+IMPORTANT:  Your original files are available to you when you upload your revised manuscript.  Please delete any redundant files before completing the submission.
+
+REMINDER: if you have not already done so, when submitting your revised manuscript, please include a short alternative-text description under the figure legend for each figure. Alt-text is required to ensure the accessibility of our publications. Guidance is available on the journal’s Author Guidelines webpage and at https://academic.oup.com/pages/for-authors/journals/preparing-and-submitting-your-manuscript
+
+Because we are trying to facilitate timely publication of manuscripts submitted to Briefings in Bioinformatics, we request that you submit your revised manuscript within the next four weeks.
+
+Once again, thank you for submitting your manuscript to Briefings in Bioinformatics and I look forward to receiving your revised paper in due course.
+
+Yours sincerely,
+
+Dr. Shuangge Ma (Editor in Chief) and Dr. Zhenxia Chen (Deputy Editor), Briefings in Bioinformatics
+
+Reviewers' Comments to Author:
+Reviewer: 1
+
+Comments to the Author
+This manuscript conducted a comprehensive, task-oriented evaluation of ten commonly used batch-effect correction strategies for integrating microarray and RNA-seq data. The authors assessed the method performance across four downstream tasks, including   distributional alignment, clustering, cross-platform outcome prediction, and DE analysis. They finally concluded that limma was the best general-purpose method for DE analysis and clustering analysis while QN for outcome prediction. Overall, the manuscript is well-motivated and well-written, the results could provide practical guidance on when batch-effect correction is necessary and how cross-platform gene-expression data should be analyzed to ensure valid and reproducible inference. I have the following suggestions to further improve the manuscript.
+
+1. The reference in the Abstract should be deleted.
+2. The authors should clarify the reason to choose these ten methods, are there any other methods not included. What is the rationale behind such choice.
+3. In the power simulation, the authors designated 2,000 DE genes, including 1,000 upregulated and 1,000 downregulated genes, among 16,160 total genes. I wonder whether the number of true DE genes, or the ratio of upregulated to downregulated genes, could affect the results of method comparison.
+
+4. In the cross-platform outcome prediction performance, the authors only used Lasso regression, I also wonder whether other methods could affect the results. The authors should clarify this.
+
+Reviewer: 2
+
+Comments to the Author
+This manuscript presents a comparison of ten batch-effect correction approaches for integrating microarray and RNA-seq expression data. Although several methods are compared using simulated and real datasets, I have substantial concerns regarding the scope and contemporary relevance of the benchmark, as well as the simulation design, statistical framework, implementation of competing methods and reproducibility. The manuscript evaluates only a limited collection of relatively established methods, focuses primarily on microarray and bulk RNA-seq integration, and uses only three real datasets. Many methods from the much broader landscape of current batch-correction and data-integration approaches, especially those developed for single-cell transcriptomic data, are missing. Thus, the manuscript's title and general conclusions appear considerably broader than what the current benchmark actually supports.
+Major Comments
+1. The scope of the evaluated batch-correction methods is too limited to support the broad conclusions of the manuscript. The manuscript evaluates ten methods, but a large number of more recent methods are missing. Relevant methods include, but are not limited to, those described in PMID: 37991248, 38778573, 33758076, and 29608177. Additional methods have also been compared in PMID: 40623818. The authors should consider including representative newer methods, particularly methods developed for batch correction and integration of scRNA-seq data.
+2. Although integrating historical microarray studies with RNA-seq datasets remains relevant in some applications, microarray technology is now largely a legacy platform, whereas a substantial proportion of current transcriptomic integration and batch-correction research focuses on RNA-seq and, especially, single-cell RNA-seq. Many widely used contemporary integration methods have been specifically developed for scRNA-seq datasets. The absence of any single-cell datasets or methods therefore makes it difficult to interpret this study as a general assessment of current batch-correction methodology. The manuscript itself acknowledges that its evaluation is restricted to bulk transcriptomic data, but I believe this limitation is more fundamental than is currently conveyed in the Discussion.
+3. The real-data evaluation is based on only three datasets but they are insufficient to support broad rankings of batch-correction methods. The benchmark should therefore be expanded to include a substantially larger and more diverse collection of public datasets. In particular, I encourage the authors to consider widely used resources such as The Cancer Genome Atlas (TCGA) and other large public cancer transcriptomic datasets. TCGA contains multiple cancer types with substantial biological heterogeneity and has been extensively used for benchmarking transcriptomic analytical approaches.
+4. The simulation framework requires substantially more detail and validation. The simulation is central to the manuscript because the conclusions concerning Type I error and statistical power rely heavily on it. However, the procedure used to introduce DE signals is insufficiently described. The dependence of all simulations on METSIM is also an important limitation. A simulation framework derived from a single dataset may inadvertently favor methods whose assumptions are particularly compatible with the distributional characteristics of that dataset. Simulations based on additional empirical datasets or complementary parametric simulation frameworks would strengthen the conclusions.
+5. The methods differ not only in batch correction but apparently also in preprocessing. For example, the manuscript states that RNA-seq data used with limma are log2-transformed and quantile-normalized within each platform before correction. Other methods involve their own transformations, reference distributions, or normalization procedures. Consequently, the benchmark may be comparing complete preprocessing pipelines rather than the batch-correction algorithms themselves. The authors should clarify this issue and discuss its potential impact on the comparative results.
+6. I am concerned about how limma is defined and evaluated in this benchmark. limma is fundamentally a statistical modeling framework for differential expression rather than simply a data-harmonization algorithm comparable to QN, TDM, ComBat, or Shambhala2. The manuscript describes limma as fitting gene-wise linear models with empirical Bayes variance moderation. However, DE testing is subsequently described as being performed using a Wilcoxon rank-sum test on the corrected pooled data. It is therefore unclear exactly which component of limma is used to generate the "limma-corrected" expression matrix and which component contributes to its reported DE performance. Furthermore, DESeq2 and edgeR are widely used methods for normalization and DE analysis of RNA-seq data. The authors should explain why these methods, or appropriate approaches based on these frameworks, were not considered in the evaluation.
+7. The manuscript compares batch-corrected pooled analyses with a Cauchy p-value meta-analysis. This comparison is useful, but these approaches address somewhat different statistical problems. Batch correction modifies expression measurements to enable joint analysis, whereas meta-analysis combines study-specific statistical evidence without constructing a harmonized expression matrix. For DE analysis, I encourage the authors to include a conventional joint regression/modeling baseline in which platform or study is explicitly included as a covariate without first generating a batch-corrected expression matrix. This would provide an important reference point between "correct then pool" and "analyze separately then meta-analyze."
+8. The real-data evaluation of alignment and clustering is largely qualitative. Distributional alignment is assessed using histograms, and clustering performance is evaluated primarily by inspection of hierarchical clustering patterns. These visualizations are useful but insufficient for a systematic benchmark. The authors should add quantitative metrics that separately evaluate different aspects of batch removal and biological-signal preservation.
+9. The manuscript is submitted as a "Problem solving protocol," yet the Data Availability section provides access to the underlying datasets without an accompanying reproducible computational pipeline. For a benchmarking study, the authors should provide all source code and preprocessing scripts, ideally in a stable public repository. The repository should also include the parameters used for each method and sufficient information to reproduce the simulation and real-data analyses.
+10. The manuscript repeatedly describes limma as the "best general-purpose method" or "strongest overall" approach. I do not believe the current benchmark supports such broad statements. The study examines only ten selected methods, three real bulk datasets, simulations derived from one of those datasets, one prediction algorithm, and no single-cell data. In addition, many recently developed integration approaches are absent. The title, Abstract, Key Points, Discussion, and Conclusions should therefore be revised to more accurately reflect the scope of the study.
+Minor Comments
+1. Please clearly explain how the ten methods were selected and provide explicit inclusion and exclusion criteria.
+2. A table listing the publication year and intended application domain of each method would help readers assess how representative the benchmark is of current methodology.
+3. Please report the number of simulation replicates prominently in the Methods section and figure legends.
+4. The manuscript should consistently distinguish between "sample-wise" and "subject-wise."
+5. Please provide the exact software and package versions used in the analyses.
+6. Please explain how microarray probes were mapped to RNA-seq genes and how multiple probes corresponding to the same gene were handled.
+7. Please define "effect size" mathematically.
+8. For the Cauchy combination method, please specify the p-value weights used.
+9. The use of the Wilcoxon rank-sum test for all corrected datasets should be justified.
+
+Reviewer: 3
+
+Comments to the Author
+This manuscript presents a benchmark evaluation of 10 batch-correction methods for integrating bulk microarray and bulk RNA-seq data, comparing them on distribution alignment, clustering, Type I error control, statistical power, and outcome prediction. However, I remain unconvinced the contribution meets the journal's publication standard in its current form, principally because the method-inclusion criterion is not explicitly justified, which needs to be substantively addressed.
+
+Major Concerns:
+1. The inclusion criterion for the 10 evaluated methods is not explicitly stated. The only statement that resembles a selection rule appears in Methods: "……that are commonly used or adapted for cross-platform integration of microarray and RNA-seq data." This is a loose description rather than a principled inclusion criterion. The phrase "commonly used or adapted" reads more like a convenience-based selection — i.e., methods the authors were familiar with or had readily available implementations — than a transparent, landscape-driven sampling of the field.
+
+For example, ComBat-seq (DOI: 10.1093/nargab/lqaa078) is the count-data extension of ComBat. XPN (Cross-Platform Normalization) (DOI: 10.1093/bioinformatics/btn083) is the foundational method that introduced the term "cross-platform normalization" and Shambhala-2 is built on XPN. It is confusing that some included methods are relatively classic (e.g., QN 2003, ComBat 2007) while others are recent (e.g., Shambhala-2 2022, Rank-In 2021). Without a stated principle, it is difficult for the reader to judge whether the selection was systematic or ad hoc, and this weakens the generality of the evaluation.
+
+2. Scope is implicitly bulk-only but framed as general "cross-platform integration". From the title through most of the text the manuscript advertises "cross-platform integration" without qualification. However, the entire evaluation is restricted to bulk microarray and bulk RNA-seq. This is a specialized setting, and the manuscript should declare it explicitly.
+
+Cross-batch / cross-platform integration is currently one of the most active areas of computational transcriptomics, but the dominant and most literature-dense frontier is single-cell RNA-seq (more broadly, multi-omics) integration. Therefore, the scope must be stated explicitly. As written, the only acknowledgment of the bulk-only boundary appears in the Discussion and the Summary. Since the title, abstract, and the early sections all claim "cross-platform integration", a reader could reasonably assume the comparison extends to single-cell settings, which the present data do not support.
+
+I suggest that the authors either (a), explicitly declare the microarray–bulk RNA-seq scope in the title, abstract, and Methods; or (b), if they wish to retain the broader "cross-platform integration" framing, expand the benchmark to include representative single-cell or multi-omics cross-platform integration methods.
+
+Minor concerns:
+
+1. The ten evaluated methods differ in original intent: only five were designed for cross-platform integration — TDM, MMR, RNABC, Rank-In, and Shambhala2 — whereas the other five — QN, Angel, ComBat, limma, and COCONUT — were developed for single-platform batch correction. The manuscript should explain why single-platform methods were brought into a cross-platform benchmark, and justify whether it is fair to compare methods developed for different motivations. It is counterintuitive that the single-platform method limma is the strongest performer overall, while MMR, purpose-built for cross-platform integration, is among the weakest. Given this reversal, the evaluation settings and results warrant a careful re-examination.
+
+2. Figure 1 is hard to read: most boxes are extremely flat and split by method×design, hindering within-design comparison. A more intuitive grouped layout that compares all methods within the same panel should be adopted. The red dashed line (α = 0.05?) is also undeclared in both caption and text.
+
+3. In Figure 2, only Rank-in is shown, yet the conclusion is drawn for "supervised methods". COCONUT should also be included or explicitly discussed. Otherwise, no general conclusion can be drawn about the supervised methods. In addition, the caption calls it a "Sample clustering result," but the panels are PCA scatter plots without any clustering.
+
+Editor's Comments to Author:
+Editor
+Comments to the Author:
