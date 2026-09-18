@@ -21,22 +21,22 @@ The manuscript source and the response to reviewers are not included here.
 Thirteen correction methods plus a meta-analysis arm. Details of each algorithm are in
 Table 1 of the manuscript; this is the roster and where each one is implemented in `code/`.
 
-| Class | Method | Applied by | Implementation | Original application domain |
-|---|---|---|---|---|
-| Unsupervised subject-wise | Quantile normalization (QN) | [`real_silhouette_all.R#L114`](code/real_silhouette_all.R#L114) | `preprocessCore` 1.70.0 | within-platform microarray normalization |
-| | Angel's method | [`real_silhouette_all.R#L117`](code/real_silhouette_all.R#L117) | base R 4.5.0 | cross-platform transcriptome atlas |
-| | TDM | [`real_silhouette_all.R#L119`](code/real_silhouette_all.R#L119) | `TDM` 0.3 | cross-platform microarray–RNA-seq for ML |
-| Unsupervised gene-wise | MatchMixeR (MMR) | [`sim_rerun_common.R#L93`](code/sim_rerun_common.R#L93) | `MatchMixeR` 0.1.1 | cross-platform, matched samples |
-| | ComBat | [`sim_rerun_common.R#L162`](code/sim_rerun_common.R#L162) | `sva` 3.56.0 | within-platform microarray batch correction |
-| | ComBat-seq | [`sim_rerun_common.R#L110`](code/sim_rerun_common.R#L110) | `sva` 3.56.0 | RNA-seq count batch correction |
-| | RNABC | [`sim_rerun_common.R#L189`](code/sim_rerun_common.R#L189) | `preprocessCore` + `sva` | cross-platform subtype transfer |
-| | Shambhala2 | [`real_silhouette_all.R#L130`](code/real_silhouette_all.R#L130), [`longleaf_external_tools.R`](code/longleaf_external_tools.R) | MATLAB R2024b | cross-platform harmonization to a universal format |
-| | limma | [`sim_rerun_common.R#L172`](code/sim_rerun_common.R#L172) | `limma` 3.64.1 | differential expression framework |
-| | XPN | [`sim_rerun_common.R#L199`](code/sim_rerun_common.R#L199) | `MatchMixeR` 0.1.1 | cross-platform merging of two studies |
-| | MNN | [`sim_rerun_common.R#L102`](code/sim_rerun_common.R#L102) | `batchelor` 1.24.0 | cross-batch integration of single-cell RNA-seq |
-| Supervised | COCONUT | [`real_silhouette_all.R#L154`](code/real_silhouette_all.R#L154) | `COCONUT` 1.0.2 | multi-study co-normalization using controls |
-| | Rank-In | [`real_silhouette_all.R#L138`](code/real_silhouette_all.R#L138), [`longleaf_external_tools.R`](code/longleaf_external_tools.R) | Python 3.9 | cross-platform microarray–RNA-seq for cancer |
-| Meta-analysis | Cauchy combination (ACAT) | [`method_smoke_test.R#L228`](code/method_smoke_test.R#L228) | `ACAT` | combines per-study p-values |
+| Class | Method | Implementation | Original application domain |
+|---|---|---|---|
+| Unsupervised subject-wise | Quantile normalization (QN) | `preprocessCore` 1.70.0 | within-platform microarray normalization |
+| | Angel's method | base R 4.5.0 | cross-platform transcriptome atlas |
+| | TDM | `TDM` 0.3 | cross-platform microarray–RNA-seq for ML |
+| Unsupervised gene-wise | MatchMixeR (MMR) | `MatchMixeR` 0.1.1 | cross-platform, matched samples |
+| | ComBat | `sva` 3.56.0 | within-platform microarray batch correction |
+| | ComBat-seq | `sva` 3.56.0 | RNA-seq count batch correction |
+| | RNABC | `preprocessCore` + `sva` | cross-platform subtype transfer |
+| | Shambhala2 | MATLAB R2024b | cross-platform harmonization to a universal format |
+| | limma | `limma` 3.64.1 | differential expression framework |
+| | XPN | `MatchMixeR` 0.1.1 | cross-platform merging of two studies |
+| | MNN | `batchelor` 1.24.0 | cross-batch integration of single-cell RNA-seq |
+| Supervised | COCONUT | `COCONUT` 1.0.2 | multi-study co-normalization using controls |
+| | Rank-In | Python 3.9 | cross-platform microarray–RNA-seq for cancer |
+| Meta-analysis | Cauchy combination (ACAT) | `ACAT` | combines per-study p-values |
 
 The gene-wise methods are wrapped in [`code/sim_rerun_common.R`](code/sim_rerun_common.R)
 (`METHODS`, from line 205), which every analysis script calls, so each is parameterised in
@@ -57,20 +57,20 @@ too, because several of these choices change the result materially.
 
 | Method | Call | Non-default arguments | Input scale |
 |---|---|---|---|
-| QN | `normalize.quantiles.use.target()` | `target` = first microarray column | array RMA log2; seq log2(TPM+1) |
-| Angel | base R | `rank(x)/length(x)` within each sample | array RMA log2; seq log2(TPM+1) |
-| TDM | `tdm_transform()` | `ref_data` = microarray, `target_data` = RNA-seq | array RMA log2; seq rounded to integer |
-| MMR | `MatchMixeR::MM(a, lg)` | defaults | array RMA log2; seq log(TPM+1) |
-| ComBat | `sva::ComBat()` | `mod = NULL` | both quantile-normalized **within** platform first |
-| ComBat-seq | `sva::ComBat_seq()` | `group = NULL` | array `2^x` then depth-matched to the seq median library size and rounded; seq rounded |
-| RNABC | `normalize.quantiles.use.target()` then `sva::ComBat()` | `target` = `rowMeans` of the microarray; `mod = NULL` | array RMA log2; seq log(TPM+1) |
-| Shambhala2 | `Shambhala2(Input, P0, Q0)` | `k = 5`, `delete_buffer_files = TRUE` | `Q0` = microarray, `P0` = `Input` = **raw** seq; output already on the array scale |
-| limma | `limma::removeBatchEffect()` | `design = NULL` | both quantile-normalized **within** platform first |
-| XPN | `MatchMixeR::xpn()` | defaults; corrects **both** platforms | array RMA log2; seq log(TPM+1) |
-| MNN | `batchelor::mnnCorrect()` | `k = 20`, `cos.norm.in = FALSE`, `cos.norm.out = FALSE` | array RMA log2; seq log(TPM+1) |
-| COCONUT | `COCONUT()` | `control.0.col = "group"`, `byPlatform = FALSE` | array RMA log2; seq log(TPM+1) |
-| Rank-In | vendor program via `RankIn()` | vendor defaults; leading `gene` column, tab-separated, unquoted | array RMA log2; seq **raw** counts |
-| Meta (ACAT) | `ACAT()` | equal weights, `w_k = 1/K`; NA p-values dropped per gene | per-study p-values |
+| QN | `normalize.quantiles.use.target()` ([code](code/real_silhouette_all.R#L114)) | `target` = first microarray column | array RMA log2; seq log2(TPM+1) |
+| Angel | base R ([code](code/real_silhouette_all.R#L117)) | `rank(x)/length(x)` within each sample | array RMA log2; seq log2(TPM+1) |
+| TDM | `tdm_transform()` ([code](code/real_silhouette_all.R#L119)) | `ref_data` = microarray, `target_data` = RNA-seq | array RMA log2; seq rounded to integer |
+| MMR | `MatchMixeR::MM(a, lg)` ([code](code/sim_rerun_common.R#L93)) | defaults | array RMA log2; seq log(TPM+1) |
+| ComBat | `sva::ComBat()` ([code](code/sim_rerun_common.R#L162)) | `mod = NULL` | both quantile-normalized **within** platform first |
+| ComBat-seq | `sva::ComBat_seq()` ([code](code/sim_rerun_common.R#L110)) | `group = NULL` | array `2^x` then depth-matched to the seq median library size and rounded; seq rounded |
+| RNABC | `normalize.quantiles.use.target()` then `sva::ComBat()` ([code](code/sim_rerun_common.R#L189)) | `target` = `rowMeans` of the microarray; `mod = NULL` | array RMA log2; seq log(TPM+1) |
+| Shambhala2 | `Shambhala2(Input, P0, Q0)` ([code](code/real_silhouette_all.R#L130)) | `k = 5`, `delete_buffer_files = TRUE` | `Q0` = microarray, `P0` = `Input` = **raw** seq; output already on the array scale |
+| limma | `limma::removeBatchEffect()` ([code](code/sim_rerun_common.R#L172)) | `design = NULL` | both quantile-normalized **within** platform first |
+| XPN | `MatchMixeR::xpn()` ([code](code/sim_rerun_common.R#L199)) | defaults; corrects **both** platforms | array RMA log2; seq log(TPM+1) |
+| MNN | `batchelor::mnnCorrect()` ([code](code/sim_rerun_common.R#L102)) | `k = 20`, `cos.norm.in = FALSE`, `cos.norm.out = FALSE` | array RMA log2; seq log(TPM+1) |
+| COCONUT | `COCONUT()` ([code](code/real_silhouette_all.R#L154)) | `control.0.col = "group"`, `byPlatform = FALSE` | array RMA log2; seq log(TPM+1) |
+| Rank-In | vendor program via `RankIn()` ([code](code/real_silhouette_all.R#L138)) | vendor defaults; leading `gene` column, tab-separated, unquoted | array RMA log2; seq **raw** counts |
+| Meta (ACAT) | `ACAT()` ([code](code/method_smoke_test.R#L228)) | equal weights, `w_k = 1/K`; NA p-values dropped per gene | per-study p-values |
 
 Shared settings: differential expression is tested with `wilcox.test()` on the pooled
 corrected matrix; prediction uses `cv.glmnet(family = "binomial", nfolds = 5)` at
