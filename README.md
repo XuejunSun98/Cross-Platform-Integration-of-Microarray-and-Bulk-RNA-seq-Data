@@ -21,25 +21,28 @@ The manuscript source and the response to reviewers are not included here.
 Thirteen correction methods plus a meta-analysis arm. Details of each algorithm are in
 Table 1 of the manuscript; this is the roster and where each one is implemented in `code/`.
 
-| Class | Method | Implementation | Original application domain |
-|---|---|---|---|
-| Unsupervised subject-wise | Quantile normalization (QN) | `preprocessCore` 1.70.0 | within-platform microarray normalization |
-| | Angel's method | base R 4.5.0 | cross-platform transcriptome atlas |
-| | TDM | `TDM` 0.3 | cross-platform microarray–RNA-seq for ML |
-| Unsupervised gene-wise | MatchMixeR (MMR) | `MatchMixeR` 0.1.1 | cross-platform, matched samples |
-| | ComBat | `sva` 3.56.0 | within-platform microarray batch correction |
-| | ComBat-seq | `sva` 3.56.0 | RNA-seq count batch correction |
-| | RNABC | `preprocessCore` + `sva` | cross-platform subtype transfer |
-| | Shambhala2 | MATLAB R2024b | cross-platform harmonization to a universal format |
-| | limma | `limma` 3.64.1 | differential expression framework |
-| | XPN | `MatchMixeR` 0.1.1 | cross-platform merging of two studies |
-| | MNN | `batchelor` 1.24.0 | cross-batch integration of single-cell RNA-seq |
-| Supervised | COCONUT | `COCONUT` 1.0.2 | multi-study co-normalization using controls |
-| | Rank-In | Python 3.9 | cross-platform microarray–RNA-seq for cancer |
-| Meta-analysis | Cauchy combination (ACAT) | `ACAT` | combines per-study p-values |
+| Class | Method | Applied by | Implementation | Original application domain |
+|---|---|---|---|---|
+| Unsupervised subject-wise | Quantile normalization (QN) | [`real_silhouette_all.R#L114`](code/real_silhouette_all.R#L114) | `preprocessCore` 1.70.0 | within-platform microarray normalization |
+| | Angel's method | [`real_silhouette_all.R#L117`](code/real_silhouette_all.R#L117) | base R 4.5.0 | cross-platform transcriptome atlas |
+| | TDM | [`real_silhouette_all.R#L119`](code/real_silhouette_all.R#L119) | `TDM` 0.3 | cross-platform microarray–RNA-seq for ML |
+| Unsupervised gene-wise | MatchMixeR (MMR) | [`sim_rerun_common.R#L93`](code/sim_rerun_common.R#L93) | `MatchMixeR` 0.1.1 | cross-platform, matched samples |
+| | ComBat | [`sim_rerun_common.R#L162`](code/sim_rerun_common.R#L162) | `sva` 3.56.0 | within-platform microarray batch correction |
+| | ComBat-seq | [`sim_rerun_common.R#L110`](code/sim_rerun_common.R#L110) | `sva` 3.56.0 | RNA-seq count batch correction |
+| | RNABC | [`sim_rerun_common.R#L189`](code/sim_rerun_common.R#L189) | `preprocessCore` + `sva` | cross-platform subtype transfer |
+| | Shambhala2 | [`real_silhouette_all.R#L130`](code/real_silhouette_all.R#L130), [`longleaf_external_tools.R`](code/longleaf_external_tools.R) | MATLAB R2024b | cross-platform harmonization to a universal format |
+| | limma | [`sim_rerun_common.R#L172`](code/sim_rerun_common.R#L172) | `limma` 3.64.1 | differential expression framework |
+| | XPN | [`sim_rerun_common.R#L199`](code/sim_rerun_common.R#L199) | `MatchMixeR` 0.1.1 | cross-platform merging of two studies |
+| | MNN | [`sim_rerun_common.R#L102`](code/sim_rerun_common.R#L102) | `batchelor` 1.24.0 | cross-batch integration of single-cell RNA-seq |
+| Supervised | COCONUT | [`real_silhouette_all.R#L154`](code/real_silhouette_all.R#L154) | `COCONUT` 1.0.2 | multi-study co-normalization using controls |
+| | Rank-In | [`real_silhouette_all.R#L138`](code/real_silhouette_all.R#L138), [`longleaf_external_tools.R`](code/longleaf_external_tools.R) | Python 3.9 | cross-platform microarray–RNA-seq for cancer |
+| Meta-analysis | Cauchy combination (ACAT) | [`method_smoke_test.R#L228`](code/method_smoke_test.R#L228) | `ACAT` | combines per-study p-values |
 
-All thirteen are wrapped in `code/sim_rerun_common.R` (`METHODS`), which is the single
-definition every analysis script calls, so a method is parameterised in exactly one place.
+The gene-wise methods are wrapped in [`code/sim_rerun_common.R`](code/sim_rerun_common.R)
+(`METHODS`, from line 205), which every analysis script calls, so each is parameterised in
+exactly one place. [`code/real_silhouette_all.R`](code/real_silhouette_all.R) is the one
+script that applies all thirteen in a single pass, including the two that need external
+tools, and is the easiest place to read the whole set side by side.
 
 Two need external tools, and `code/longleaf_external_tools.R` provides drop-in replacements
 that run both on Linux, each validated against the original implementation's own reference
